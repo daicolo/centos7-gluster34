@@ -8,6 +8,28 @@
 - **GlusterFS**: バージョン 3.4.7
 - **ノード数**: 4台のGlusterFSノード（基本3台＋予備1台）
 - **SSH**: 各ノードでポート2222で有効
+- **CI/CD**: GitHub Actionsによる自動ビルド・デプロイ
+
+## GitHub Container Registry
+
+このプロジェクトは、GitHub Container Registry (GHCR)に自動的にイメージがプッシュされます：
+
+- **レジストリ**: `ghcr.io/daicolo/centos7-gluster34`
+- **タグ**: リリースタグ（例：`v1.0.0`）と `latest`
+- **自動ビルド**: `v*` パターンのタグがプッシュされると自動でビルド・プッシュされます
+
+### リリースとイメージ作成
+
+```bash
+# 新しいバージョンをタグ付けしてプッシュ
+git tag v1.0.0
+git push origin v1.0.0
+
+# GitHub Actionsが自動的に以下を実行：
+# 1. Docker イメージをビルド
+# 2. GHCR にプッシュ（タグ: v1.0.0, latest）
+# 3. BuildKit キャッシュを利用して高速化
+```
 
 ## 使用方法
 

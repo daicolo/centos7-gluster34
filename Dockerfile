@@ -2,15 +2,24 @@ FROM centos:7
 
 LABEL maintainer="daicolo"
 
+# OCI Labels for metadata
+LABEL org.opencontainers.image.title="CentOS 7 GlusterFS 3.4 Docker Compose"
+LABEL org.opencontainers.image.description="Containerized GlusterFS 3.4.7 cluster on CentOS 7 with Docker Compose v2 support"
+LABEL org.opencontainers.image.vendor="daicolo"
+LABEL org.opencontainers.image.licenses="MIT"
+LABEL org.opencontainers.image.documentation="https://github.com/daicolo/centos7-gluster34/blob/main/README.md"
+LABEL org.opencontainers.image.source="https://github.com/daicolo/centos7-gluster34"
+
 ENV container=docker
 
+# Copy repository configuration first for better cache utilization
 ADD glusterfs.repo /etc/yum.repos.d/glusterfs.repo
-# mirrorlist.centos.org
-RUN ls -al /etc/yum.repos.d/;
 
-RUN sed -i 's/^mirrorlist=http/#mirrorlist=http/g' /etc/yum.repos.d/CentOS-Base.repo
-RUN sed -i 's/^#.*baseurl=http/baseurl=http/g' /etc/yum.repos.d/CentOS-Base.repo
-RUN sed -i 's/mirror.centos.org/vault.centos.org/g' /etc/yum.repos.d/CentOS-Base.repo
+# Configure CentOS repositories in a single layer
+RUN ls -al /etc/yum.repos.d/ && \
+    sed -i 's/^mirrorlist=http/#mirrorlist=http/g' /etc/yum.repos.d/CentOS-Base.repo && \
+    sed -i 's/^#.*baseurl=http/baseurl=http/g' /etc/yum.repos.d/CentOS-Base.repo && \
+    sed -i 's/mirror.centos.org/vault.centos.org/g' /etc/yum.repos.d/CentOS-Base.repo
 
 
 RUN  yum clean all; yum --setopt=tsflags=nodocs -y update; yum clean all;
