@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: centos7-gluster34
+    image: ghcr.io/daicolo/centos7-gluster34:v0.1-20250731
     container_name: gluster-node1
     hostname: gluster-node1
     privileged: true
@@ -32,7 +32,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: centos7-gluster34
+    image: ghcr.io/daicolo/centos7-gluster34:v0.1-20250731
     container_name: gluster-node2
     hostname: gluster-node2
     privileged: true
@@ -61,7 +61,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: centos7-gluster34
+    image: ghcr.io/daicolo/centos7-gluster34:v0.1-20250731
     container_name: gluster-node3
     hostname: gluster-node3
     privileged: true
@@ -90,7 +90,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: centos7-gluster34
+    image: ghcr.io/daicolo/centos7-gluster34:v0.1-20250731
     container_name: gluster-node4
     hostname: gluster-node4
     privileged: true

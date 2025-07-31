@@ -13,15 +13,35 @@
 
 ### 1. イメージのビルドとコンテナの起動
 
+#### オプション1: GitHub Container Registryから取得（推奨）
+
 ```bash
+# 事前ビルド済みイメージを使用
+docker compose pull
+
 # すべてのサービスを起動
 docker compose up -d
+```
 
-# または特定のノードのみ起動
-docker compose up -d gluster-node1 gluster-node2 gluster-node3
+#### オプション2: ローカルでビルド
 
+```bash
+# ローカルでイメージをビルドしてから起動
+docker compose up -d --build
+
+# または手動でビルド
+./build-and-push.sh build
+docker compose up -d
+```
+
+#### その他の起動オプション
+
+```bash
 # 予備ノードも含めて起動
 docker compose up -d gluster-node1 gluster-node2 gluster-node3 gluster-node4
+
+# 基本3ノードのみ起動
+docker compose up -d gluster-node1 gluster-node2 gluster-node3
 ```
 
 ### 2. GlusterFSクラスターの設定
@@ -295,7 +315,29 @@ data/
 
 これらのディレクトリは自動的に作成されます。
 
-## 8. 停止と削除
+## 8. イメージのビルドとpush
+
+### GitHub Container Registryへのpush
+
+```bash
+# 1. GitHub Container Registryにログイン
+./build-and-push.sh login
+
+# 2. イメージのビルドとpush
+./build-and-push.sh all
+
+# または個別実行
+./build-and-push.sh build  # ビルドのみ
+./build-and-push.sh push   # pushのみ
+```
+
+### 利用可能なイメージ
+
+- **Registry**: `ghcr.io/daicolo/centos7-gluster34:v0.1-20250731`
+- **サイズ**: 約650MB
+- **ベース**: CentOS 7 + GlusterFS 3.4.7
+
+## 9. 停止と削除
 
 ```bash
 # サービス停止
@@ -305,7 +347,7 @@ docker compose down
 docker compose down -v
 ```
 
-## 9. 注意事項
+## 10. 注意事項
 
 - コンテナは`privileged: true`で実行されます（systemd使用のため）
 - `/sys/fs/cgroup`をread-onlyでマウントしています
