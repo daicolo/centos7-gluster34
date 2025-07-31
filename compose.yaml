@@ -1,0 +1,109 @@
+services:
+  gluster-node1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: centos7-gluster34
+    container_name: gluster-node1
+    hostname: gluster-node1
+    privileged: true
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - gluster1-etc:/etc/glusterfs
+      - gluster1-lib:/var/lib/glusterd
+      - gluster1-log:/var/log/glusterfs
+      - ./data/node1:/data
+      - gluster1-heketi:/var/lib/heketi
+    ports:
+      - "2222:2222"   # SSH
+      - "24007:24007" # Gluster Daemon
+      - "24008:24008" # Gluster Management
+      - "49152:49152" # Gluster Brick 1
+      - "49153:49153" # Gluster Brick 2
+      - "49154:49154" # Gluster Brick 3
+    networks:
+      - gluster-net
+    restart: unless-stopped
+    environment:
+      - container=docker
+    command: /usr/sbin/init
+
+  gluster-node2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: centos7-gluster34
+    container_name: gluster-node2
+    hostname: gluster-node2
+    privileged: true
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - gluster2-etc:/etc/glusterfs
+      - gluster2-lib:/var/lib/glusterd
+      - gluster2-log:/var/log/glusterfs
+      - ./data/node2:/data
+      - gluster2-heketi:/var/lib/heketi
+    ports:
+      - "2223:2222"   # SSH
+      - "24017:24007" # Gluster Daemon
+      - "24018:24008" # Gluster Management
+      - "49162:49152" # Gluster Brick 1
+      - "49163:49153" # Gluster Brick 2
+      - "49164:49154" # Gluster Brick 3
+    networks:
+      - gluster-net
+    restart: unless-stopped
+    environment:
+      - container=docker
+    command: /usr/sbin/init
+
+  gluster-node3:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: centos7-gluster34
+    container_name: gluster-node3
+    hostname: gluster-node3
+    privileged: true
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - gluster3-etc:/etc/glusterfs
+      - gluster3-lib:/var/lib/glusterd
+      - gluster3-log:/var/log/glusterfs
+      - ./data/node3:/data
+      - gluster3-heketi:/var/lib/heketi
+    ports:
+      - "2224:2222"   # SSH
+      - "24027:24007" # Gluster Daemon
+      - "24028:24008" # Gluster Management
+      - "49172:49152" # Gluster Brick 1
+      - "49173:49153" # Gluster Brick 2
+      - "49174:49154" # Gluster Brick 3
+    networks:
+      - gluster-net
+    restart: unless-stopped
+    environment:
+      - container=docker
+    command: /usr/sbin/init
+
+networks:
+  gluster-net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.20.0.0/16"
+
+volumes:
+  gluster1-etc:
+  gluster1-lib:
+  gluster1-log:
+  gluster1-heketi:
+  gluster2-etc:
+  gluster2-lib:
+  gluster2-log:
+  gluster2-heketi:
+  gluster3-etc:
+  gluster3-lib:
+  gluster3-log:
+  gluster3-heketi:

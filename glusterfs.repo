@@ -1,0 +1,12 @@
+# {{ ansible_managed }}
+# /etc/yum.repos.d/glusterfs.repo
+
+
+[glusterfs]
+name=Yum Repository
+baseurl=http://corty.tsundere.ne.jp/glusterfs/3.4/LATEST/EPEL.repo/epel-$releasever/$basearch/
+enabled=1
+fastestmirror_enabled=0
+gpgcheck=1
+gpgkey=http://corty.tsundere.ne.jp/glusterfs/3.4/LATEST/EPEL.repo/pub.key
+
