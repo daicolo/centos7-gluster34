@@ -86,6 +86,35 @@ services:
       - container=docker
     command: /usr/sbin/init
 
+  gluster-node4:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: centos7-gluster34
+    container_name: gluster-node4
+    hostname: gluster-node4
+    privileged: true
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - gluster4-etc:/etc/glusterfs
+      - gluster4-lib:/var/lib/glusterd
+      - gluster4-log:/var/log/glusterfs
+      - ./data/node4:/data
+      - gluster4-heketi:/var/lib/heketi
+    ports:
+      - "2225:2222"   # SSH
+      - "24037:24007" # Gluster Daemon
+      - "24038:24008" # Gluster Management
+      - "49182:49152" # Gluster Brick 1
+      - "49183:49153" # Gluster Brick 2
+      - "49184:49154" # Gluster Brick 3
+    networks:
+      - gluster-net
+    restart: unless-stopped
+    environment:
+      - container=docker
+    command: /usr/sbin/init
+
 networks:
   gluster-net:
     driver: bridge
@@ -107,3 +136,7 @@ volumes:
   gluster3-lib:
   gluster3-log:
   gluster3-heketi:
+  gluster4-etc:
+  gluster4-lib:
+  gluster4-log:
+  gluster4-heketi:
