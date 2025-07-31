@@ -2,9 +2,6 @@ name: Test Build
 
 on:
   pull_request:
-    branches:
-      - main
-      - master
   push:
     branches:
       - main
@@ -12,6 +9,9 @@ on:
     paths:
       - 'Dockerfile'
       - 'compose.yaml'
+      - 'gluster-setup.service'
+      - 'glusterfs.repo'
+      - 'gluster-setup.sh'
       - '.github/workflows/**'
 
 env:
