@@ -317,23 +317,48 @@ data/
 
 ## 8. イメージのビルドとpush
 
+### 環境設定
+
+プロジェクトでは`.env`ファイルでイメージタグを管理できます：
+
+```bash
+# .envファイルをコピー
+cp .env.example .env
+
+# 設定を編集
+nano .env
+```
+
+**.envファイル例**:
+```bash
+REGISTRY=ghcr.io
+NAMESPACE=daicolo
+IMAGE_NAME=centos7-gluster34
+IMAGE_TAG=v0.1-20250731  # または latest, v1.0.0 など
+```
+
 ### GitHub Container Registryへのpush
 
 ```bash
 # 1. GitHub Container Registryにログイン
 ./build-and-push.sh login
 
-# 2. イメージのビルドとpush
+# 2. イメージのビルドとpush（指定タグ + latest の両方）
 ./build-and-push.sh all
 
 # または個別実行
 ./build-and-push.sh build  # ビルドのみ
-./build-and-push.sh push   # pushのみ
+./build-and-push.sh push   # pushのみ（指定タグ + latest）
 ```
+
+**pushされるタグ**:
+- `.env`で指定したタグ（例: `v0.1-20250731`）
+- `latest` タグ（IMAGE_TAGがlatestでない場合のみ）
 
 ### 利用可能なイメージ
 
-- **Registry**: `ghcr.io/daicolo/centos7-gluster34:v0.1-20250731`
+- **Registry**: `ghcr.io/daicolo/centos7-gluster34`
+- **利用可能なタグ**: `latest`, `v0.1-20250731`
 - **サイズ**: 約650MB
 - **ベース**: CentOS 7 + GlusterFS 3.4.7
 
