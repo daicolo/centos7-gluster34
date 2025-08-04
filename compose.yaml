@@ -8,6 +8,11 @@ services:
     hostname: gluster-node1
     privileged: true
     cgroup: host
+    cap_add:
+      - SYS_ADMIN
+      - NET_ADMIN
+    security_opt:
+      - seccomp:unconfined
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
       - gluster1-etc:/etc/glusterfs
@@ -40,6 +45,11 @@ services:
     hostname: gluster-node2
     privileged: true
     cgroup: host
+    cap_add:
+      - SYS_ADMIN
+      - NET_ADMIN
+    security_opt:
+      - seccomp:unconfined
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
       - gluster2-etc:/etc/glusterfs
@@ -72,6 +82,11 @@ services:
     hostname: gluster-node3
     privileged: true
     cgroup: host
+    cap_add:
+      - SYS_ADMIN
+      - NET_ADMIN
+    security_opt:
+      - seccomp:unconfined
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
       - gluster3-etc:/etc/glusterfs
@@ -104,6 +119,11 @@ services:
     hostname: gluster-node4
     privileged: true
     cgroup: host
+    cap_add:
+      - SYS_ADMIN
+      - NET_ADMIN
+    security_opt:
+      - seccomp:unconfined
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
       - gluster4-etc:/etc/glusterfs
