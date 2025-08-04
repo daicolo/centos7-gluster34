@@ -15,14 +15,19 @@ ENV container=docker
 # Copy repository configuration first for better cache utilization
 ADD glusterfs.repo /etc/yum.repos.d/glusterfs.repo
 
-# Configure CentOS repositories in a single layer
+# Configure CentOS 7 repositories (EOL support)
 RUN ls -al /etc/yum.repos.d/ && \
-    sed -i 's/^mirrorlist=http/#mirrorlist=http/g' /etc/yum.repos.d/CentOS-Base.repo && \
-    sed -i 's/^#.*baseurl=http/baseurl=http/g' /etc/yum.repos.d/CentOS-Base.repo && \
-    sed -i 's/mirror.centos.org/vault.centos.org/g' /etc/yum.repos.d/CentOS-Base.repo
+    sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-Base.repo && \
+    sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-Base.repo
 
+# Install COPR repository for systemd backports
+RUN curl -o /etc/yum.repos.d/jsynacek-systemd-backports-for-centos-7-epel-7.repo \
+    https://copr.fedorainfracloud.org/coprs/jsynacek/systemd-backports-for-centos-7/repo/epel-7/jsynacek-systemd-backports-for-centos-7-epel-7.repo
 
 RUN  yum clean all; yum --setopt=tsflags=nodocs -y update; yum clean all;
+
+# Update systemd to newer version for cgroups v2 support
+RUN yum --setopt=tsflags=nodocs -y update systemd systemd-libs systemd-sysv && yum clean all
 
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
     rm -f /lib/systemd/system/multi-user.target.wants/*;\
@@ -32,6 +37,7 @@ RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == system
     rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
     rm -f /lib/systemd/system/basic.target.wants/*;\
     rm -f /lib/systemd/system/anaconda.target.wants/*;
+
 
 RUN yum --setopt=tsflags=nodocs -y install nfs-utils attr ca-certificates iputils iproute openssh-server openssh-clients ntp rsync tar cronie sudo xfsprogs && yum clean all
 RUN update-ca-trust enable && update-ca-trust extract
@@ -68,5 +74,5 @@ RUN systemctl enable gluster-setup.service
 
 EXPOSE 2222 111 245 443 24007 2049 8080 6010 6011 6012 38465 38466 38468 38469 49152 49153 49154 49156 49157 49158 49159 49160 49161 49162
 
-CMD ["/sbin/init"]
+CMD ["/usr/sbin/init"]
 

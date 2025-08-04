@@ -7,13 +7,17 @@ services:
     container_name: gluster-node1
     hostname: gluster-node1
     privileged: true
+    cgroup: host
     volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
       - gluster1-etc:/etc/glusterfs
       - gluster1-lib:/var/lib/glusterd
       - gluster1-log:/var/log/glusterfs
       - ./data/node1:/data
       - gluster1-heketi:/var/lib/heketi
+    tmpfs:
+      - /tmp
+      - /run
     ports:
       - "2222:2222"   # SSH
       - "24007:24007" # Gluster Daemon
@@ -35,13 +39,17 @@ services:
     container_name: gluster-node2
     hostname: gluster-node2
     privileged: true
+    cgroup: host
     volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
       - gluster2-etc:/etc/glusterfs
       - gluster2-lib:/var/lib/glusterd
       - gluster2-log:/var/log/glusterfs
       - ./data/node2:/data
       - gluster2-heketi:/var/lib/heketi
+    tmpfs:
+      - /tmp
+      - /run
     ports:
       - "2223:2222"   # SSH
       - "24017:24007" # Gluster Daemon
@@ -63,13 +71,17 @@ services:
     container_name: gluster-node3
     hostname: gluster-node3
     privileged: true
+    cgroup: host
     volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
       - gluster3-etc:/etc/glusterfs
       - gluster3-lib:/var/lib/glusterd
       - gluster3-log:/var/log/glusterfs
       - ./data/node3:/data
       - gluster3-heketi:/var/lib/heketi
+    tmpfs:
+      - /tmp
+      - /run
     ports:
       - "2224:2222"   # SSH
       - "24027:24007" # Gluster Daemon
@@ -91,13 +103,17 @@ services:
     container_name: gluster-node4
     hostname: gluster-node4
     privileged: true
+    cgroup: host
     volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
       - gluster4-etc:/etc/glusterfs
       - gluster4-lib:/var/lib/glusterd
       - gluster4-log:/var/log/glusterfs
       - ./data/node4:/data
       - gluster4-heketi:/var/lib/heketi
+    tmpfs:
+      - /tmp
+      - /run
     ports:
       - "2225:2222"   # SSH
       - "24037:24007" # Gluster Daemon
